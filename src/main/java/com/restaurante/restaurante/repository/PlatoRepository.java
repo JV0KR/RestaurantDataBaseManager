@@ -1,0 +1,16 @@
+package com.restaurante.restaurante.repository;
+
+import com.restaurante.restaurante.model.Plato;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository // Opcional, pero hace explícito el propósito
+// Extender JpaRepository le da a esta interfaz métodos CRUD básicos
+// <Entidad, Tipo del ID de la Entidad>
+public interface PlatoRepository extends JpaRepository<Plato, Long> {
+
+    // Aquí puedes añadir métodos personalizados si necesitas consultas específicas
+    // Spring Data JPA puede generar consultas automáticamente a partir de los nombres de los métodos
+    // Ejemplo: buscar un usuario por su email
+    // Optional<Usuario> findByEmail(String email);
+}

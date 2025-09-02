@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de PQRS | Mi Restaurante</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos inspirados en la imagen proporcionada */
+
+        :root {
+            --purple-primary: #6D28D9; /* Púrpura principal (similar a los botones "Gestionar") */
+            --purple-dark: #5B21B6;
+            --purple-darker: #4C1D95;
+            --blue-secondary: #3B82F6; /* Azul para botones secundarios (similar a "Añadir Nuevo") */
+            --blue-dark: #2563EB;
+            --text-primary: #1F2937; /* Gris oscuro para texto */
+            --text-secondary: #4B5563;
+            --bg-page: #F3F4F6; /* Fondo de página gris muy claro */
+            --bg-card: #FFFFFF;
+            --border-color: #D1D5DB;
+            --border-focus-shadow: rgba(109, 40, 217, 0.25);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 40px; /* Espacio para el título principal */
+            padding-bottom: 40px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        /* No usaremos un .header de barra completa, el título estará más integrado */
+        .main-title {
+            font-family: 'Playfair Display', serif; /* O 'Montserrat' si se prefiere más consistencia */
+            font-size: 2.8em; /* Tamaño grande como "Bienvenido al Sistema..." */
+            font-weight: 700;
+            color: var(--purple-primary);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .main-subtitle {
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+
+        .container { /* Este será nuestro "card" principal para el formulario */
+            background-color: var(--bg-card);
+            padding: 30px 40px;
+            border-radius: 16px; /* Bordes más redondeados como en las tarjetas */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 6px 10px rgba(0,0,0,0.06);
+            width: 100%;
+            max-width: 600px; /* Ancho del formulario */
+            box-sizing: border-box;
+        }
+
+        .container h1 { /* Título dentro de la tarjeta/formulario */
+            font-family: 'Montserrat', sans-serif; /* O mantener Playfair si se prefiere */
+            text-align: center;
+            color: var(--purple-primary);
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 8px; /* Bordes redondeados para inputs */
+            font-size: 1em;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="text"]::placeholder,
+        textarea::placeholder {
+            color: #9CA3AF;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: var(--purple-primary);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--border-focus-shadow);
+        }
+
+        /* Botón principal (Registrar PQRS) - Estilo Púrpura */
+        button[type="submit"] {
+            background-color: var(--purple-primary);
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--purple-dark);
+            transform: translateY(-1px);
+        }
+
+        button[type="submit"]:active {
+            background-color: var(--purple-darker);
+            transform: translateY(0);
+        }
+
+        /* Enlaces de navegación - Estilo Azul (como "Añadir Nuevo") */
+        .navigation-links {
+            text-align: center;
+            margin-top: 30px;
+            display: flex; /* Para espaciar los botones */
+            gap: 15px; /* Espacio entre botones */
+            justify-content: center;
+        }
+
+        .navigation-links a {
+            background-color: var(--blue-secondary);
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            font-size: 0.95em;
+            display: inline-block; /* Para aplicar padding y centrar texto */
+        }
+
+        .navigation-links a:hover {
+            background-color: var(--blue-dark);
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+        /*.navigation-links a:first-child {  Estilo alternativo si se desea un botón "secundario" más ligero */
+           /* background-color: #E0E7FF;  Azul muy claro 
+           /* color: var(--blue-secondary); 
+           /* border: 1px solid var(--blue-secondary); 
+        }
+        .navigation-links a:first-child:hover {
+            background-color: #C7D2FE; 
+        }*/
+
+
+        .message {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        .message.success {
+            background-color: #D1FAE5; /* Un verde pastel para éxito */
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+
+        .message.error {
+            background-color: #FEE2E2; /* Un rojo pastel para error */
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        /* Media Queries para responsividad */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 20px;
+            }
+            .main-title {
+                font-size: 2.2em;
+            }
+            .main-subtitle {
+                font-size: 1em;
+                margin-bottom: 30px;
+            }
+            .container {
+                padding: 25px 30px;
+                max-width: 90%;
+                margin-top: 0;
+            }
+            .container h1 {
+                font-size: 1.6em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 1.8em;
+            }
+             .main-subtitle {
+                font-size: 0.9em;
+            }
+            .container {
+                padding: 20px;
+                border-radius: 12px;
+            }
+            button[type="submit"], .navigation-links a {
+                font-size: 0.95em;
+                padding: 12px 15px;
+            }
+            .navigation-links {
+                flex-direction: column; /* Apilar enlaces en pantallas pequeñas */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-title">Sistema de PQRS</div>
+    <div class="main-subtitle">Registra y gestiona las peticiones, quejas, reclamos y sugerencias de tu restaurante.</div>
+
+    <div class="container">
+        <h1>Registrar Nueva PQRS</h1>
+
+        <div th:if="${mensaje}" class="message success">
+            <p th:text="${mensaje}"></p>
+        </div>
+        <div th:if="${error}" class="message error">
+            <p th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/pqrs/guardar}" th:object="${datosFormularioPQRS}" method="post">
+            <div class="form-group">
+                <label for="rut">Restaurante (RUT):</label>
+                <select id="rut" th:field="*{rut}" required>
+                    <option value="" disabled selected>Selecciona un Restaurante</option>
+                    <!-- Iterar sobre la lista de restaurantes -->
+                    <option th:each="restaurante : ${restaurantes}" 
+                            th:value="${restaurante.RUT}" 
+                            th:text="${restaurante.nombre + ' (' + restaurante.RUT + ')'}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tipoSolicitud">Tipo de Solicitud:</label>
+                <select id="tipoSolicitud" th:field="*{tipoSolicitud}" required>
+                    <option value="" disabled selected>Selecciona un tipo</option>
+                    <option value="PETICION">Petición</option>
+                    <option value="QUEJA">Queja</option>
+                    <option value="RECLAMO">Reclamo</option>
+                    <option value="SUGERENCIA">Sugerencia</option>
+                </select>
+                </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" th:field="*{descripcion}" rows="5" required placeholder="Detalle de la PQRS..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha de Incidente/Sugerencia:</label>
+                <input type="date" id="fecha" th:field="*{fecha}" required>
+            </div>
+
+            <button type="submit">Registrar PQRS</button>
+        </form>
+
+        <div class="navigation-links">
+            <a th:href="@{/pqrs/lista}">Ver Lista de PQRS</a>
+            <a th:href="@{/}">Ir a Inicio</a>
+        </div>
+    </div>
+
+</body>
+</html>

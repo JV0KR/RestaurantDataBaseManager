@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sistema de Gestión del Restaurante</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        html, body {
+            height: auto; /* Asegura que se ajuste al contenido */
+            overflow-y: auto; /* Permite el desplazamiento vertical cuando sea necesario */
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Mantenemos esto para el centrado inicial */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 800px; /* Aumentado para acomodar más elementos */
+            width: 90%;
+            animation: fadeIn 1s ease-in-out;
+            overflow-y: auto; /* Añadimos scroll vertical solo al contenedor si su contenido excede su altura */
+            max-height: 90vh; /* Ajustado para mejor visualización */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #2575fc;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Ajustado para 2 columnas principales */
+            gap: 25px;
+            margin-top: 30px;
+            width: 100%; /* Ocupa todo el ancho del contenedor */
+        }
+
+        .menu-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item h2 {
+            color: #6a11cb;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .menu-item p.description {
+            font-size: 0.95em;
+            color: #777;
+            margin-bottom: 20px;
+            flex-grow: 1; /* Permite que la descripción ocupe el espacio disponible */
+        }
+
+        .menu-item .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: auto; /* Empuja el grupo de botones hacia abajo */
+        }
+
+        .menu-item .button-group a {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #2575fc;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .menu-item .button-group a:hover {
+            background-color: #1a5ac9;
+            transform: translateY(-2px);
+        }
+
+        .menu-item .button-group a.manage-btn {
+            background-color: #6a11cb;
+        }
+
+        .menu-item .button-group a.manage-btn:hover {
+            background-color: #550aa8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            .menu-item .button-group a {
+                width: calc(50% - 5px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu-item .button-group a {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido al Sistema de Gestión</h1>
+        <p>Selecciona una opción para administrar los datos de tu restaurante.</p>
+
+        <div class="menu-grid">
+            <div class="menu-item">
+                <h2>Platos</h2>
+                <p class="description">Administra el menú de tu restaurante: añade nuevos platos, edita o elimina los existentes.</p>
+                <div class="button-group">
+                    <a th:href="@{/platos/lista}" class="manage-btn">Gestionar Platos</a>
+                    <a th:href="@{/platos/registro}">Añadir Nuevo</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <h2>Restaurantes</h2>
+                <p class="description">Gestiona la información principal de los restaurantes.</p>
+                <div class="button-group">
+                    <a th:href="@{/restaurantes/lista}" class="manage-btn">Gestionar Restaurantes</a>
+                    <a th:href="@{/restaurantes/registro}">Añadir Nuevo</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Materias Primas</h2>
+                <p class="description">Gestiona el catálogo de materias primas que utilizas en tu restaurante.</p>
+                <div class="button-group">
+                    <a th:href="@{/materias-primas/lista}" class="manage-btn">Gestionar Materias Primas</a>
+                    <a th:href="@{/materias-primas/registro}">Añadir Nueva</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Inventario de Materias Primas</h2>
+                <p class="description">Controla las cantidades disponibles de tus materias primas.</p>
+                <div class="button-group">
+                    <a th:href="@{/inventario-materias-primas/lista}" class="manage-btn">Gestionar Inventario</a>
+                    <a th:href="@{/inventario-materias-primas/registro}">Añadir Entrada</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Empleados</h2>
+                <p class="description">Administra la información de tus empleados: datos personales, cargos y sedes asignadas.</p>
+                <div class="button-group">
+                    <a th:href="@{/empleados/lista}" class="manage-btn">Gestionar Empleados</a>
+                    <a th:href="@{/empleados/registro}">Añadir Nuevo</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Horarios</h2>
+                <p class="description">Gestiona los horarios de trabajo de tus empleados por día y hora de entrada/salida.</p>
+                <div class="button-group">
+                    <a th:href="@{/horarios/lista}" class="manage-btn">Gestionar Horarios</a>
+                    <a th:href="@{/horarios/registro}">Añadir Nuevo</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Espacios</h2>
+                <p class="description">Gestiona los diferentes espacios dentro de tus sedes (ej. Salones, Cocinas).</p>
+                <div class="button-group">
+                    <a th:href="@{/espacios/lista}" class="manage-btn">Gestionar Espacios</a>
+                    <a th:href="@{/espacios/registro}">Añadir Nuevo</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Mesas</h2>
+                <p class="description">Administra las mesas en cada uno de tus espacios: número, estado y capacidad.</p>
+                <div class="button-group">
+                    <a th:href="@{/mesas/lista}" class="manage-btn">Gestionar Mesas</a>
+                    <a th:href="@{/mesas/registro}">Añadir Nueva</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Áreas</h2>
+                <p class="description">Gestiona las diferentes áreas de tu restaurante (ej. Cocina, Salón, Administración).</p>
+                <div class="button-group">
+                    <a th:href="@{/areas/lista}" class="manage-btn">Gestionar Áreas</a>
+                    <a th:href="@{/areas/registro}">Añadir Nueva</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Cargos</h2>
+                <p class="description">Administra los cargos y salarios de tu personal. Mantén un registro organizado.</p>
+                <div class="button-group">
+                    <a th:href="@{/cargos/lista}" class="manage-btn">Gestionar Cargos</a>
+                    <a th:href="@{/cargos/registro}">Añadir Nuevo</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>Sedes</h2>
+                <p class="description">Gestiona las sedes físicas de tu restaurante. Añade nuevas ubicaciones y edita las existentes.</p>
+                <div class="button-group">
+                    <a th:href="@{/sedes/lista}" class="manage-btn">Gestionar Sedes</a>
+                    <a th:href="@{/sedes/registro}">Añadir Nueva</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <h2>PQRS</h2>
+                <p class="description">Gestiona Peticiones, Quejas, Reclamos y Sugerencias de los clientes.</p>
+                <div class="button-group">
+                    <a th:href="@{/pqrs/lista}" class="manage-btn">Gestionar PQRS</a>
+                    <a th:href="@{/pqrs/registro}">Registrar Nueva</a>
+                </div>
+            </div>
+            </div>
+
+
+            <div class="menu-item">
+                <h2>Nóminas</h2>
+                <p class="description">Administra el pago de nóminas de los empleados, incluyendo horas trabajadas y bonificaciones.</p>
+                <div class="button-group">
+                    <a th:href="@{/nominas/lista}" class="manage-btn">Gestionar Nóminas</a>
+                    <a th:href="@{/nominas/registro}">Registrar Nueva</a>
+                </div>
+            </div>
+            </div>
+
+</body>
+</html>

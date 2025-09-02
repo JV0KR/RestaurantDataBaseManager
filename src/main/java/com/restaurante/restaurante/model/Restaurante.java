@@ -1,0 +1,78 @@
+package com.restaurante.restaurante.model;
+
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "Restaurante")
+public class Restaurante {
+
+    @Id
+    @Column(name = "RUT", length = 20)
+    private String RUT;
+
+    @Column(name = "Nombre", nullable = false, length = 100)
+    private String nombre;
+
+    // mappedBy indica el campo en la entidad PQRS que gestiona la relación
+    // CascadeType.ALL significa que las operaciones (persist, merge, remove, etc.)
+    // en Restaurante se propagarán a las PQRS asociadas.
+    // FetchType.LAZY significa que las PQRS no se cargarán hasta que se accedan explícitamente.
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<PQRS> pqrsList = new ArrayList<>(); // Inicializar la lista
+
+    // Constructores
+    public Restaurante() {
+    }
+
+    public Restaurante(String RUT, String nombre) {
+        this.RUT = RUT;
+        this.nombre = nombre;
+    }
+
+    // Getters y Setters
+    public String getRUT() {
+        return RUT;
+    }
+
+    public void setRUT(String RUT) {
+        this.RUT = RUT;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List<PQRS> getPqrsList() {
+        return pqrsList;
+    }
+
+    public void setPqrsList(List<PQRS> pqrsList) {
+        this.pqrsList = pqrsList;
+    }
+
+    // Métodos de ayuda para gestionar la relación bidireccional (opcional pero recomendado)
+    public void addPQRS(PQRS pqrs) {
+        pqrsList.add(pqrs);
+        pqrs.setRestaurante(this);
+    }
+
+    public void removePQRS(PQRS pqrs) {
+        pqrsList.remove(pqrs);
+        pqrs.setRestaurante(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurante{" +
+                "RUT='" + RUT + '\'' +
+                ", nombre='" + nombre + '\'' +
+                '}';
+    }
+}
